@@ -11,7 +11,7 @@ const initialColor = {
 
 const ColorList = ({ colors, updateColors }) => {
 
-  
+  const history= useHistory()
  
   const [editing, setEditing] = useState(false);
   const [colorToEdit, setColorToEdit] = useState(initialColor);
@@ -96,6 +96,7 @@ const ColorList = ({ colors, updateColors }) => {
           <div className="button-row">
             <button type="submit">save</button>
             <button onClick={() => setEditing(false)}>cancel</button>
+            <button onClick={() => history.push('/addColor')}>Add Color</button>
           </div>
         </form>
       )}
