@@ -11,7 +11,7 @@ const initialColor = {
 
 const ColorList = ({ colors, updateColors }) => {
 
-  const history = useHistory()
+  
  
   const [editing, setEditing] = useState(false);
   const [colorToEdit, setColorToEdit] = useState(initialColor);
@@ -47,11 +47,11 @@ const ColorList = ({ colors, updateColors }) => {
   };
 
   return (
-    <div className="colors-wrap">
+    <div className="colors-wrap"  >
       <p>colors</p>
-      <ul>
+      <ul data-testid="colorsTest">
         {colors.map(color => (
-          <li key={color.color} onClick={() => editColor(color)}>
+          <li    key={color.color} onClick={() => editColor(color)}>
             <span>
               <span className="delete" onClick={e => {
                     e.stopPropagation();
