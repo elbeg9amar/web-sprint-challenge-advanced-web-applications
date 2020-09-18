@@ -1,13 +1,18 @@
 import React, { useState } from "react";
 import axios from "axios";
 
+import {axiosWithAuth} from "../utils/axiosWithAuth"
+import { useHistory } from "react-router-dom";
+
 const initialColor = {
   color: "",
   code: { hex: "" }
 };
 
 const ColorList = ({ colors, updateColors }) => {
-  console.log(colors);
+
+  const history= useHistory()
+ 
   const [editing, setEditing] = useState(false);
   const [colorToEdit, setColorToEdit] = useState(initialColor);
 
@@ -16,8 +21,17 @@ const ColorList = ({ colors, updateColors }) => {
     setColorToEdit(color);
   };
 
-  const saveEdit = e => {
+  const saveEdit = e  => {
     e.preventDefault();
+
+    const updatedColor = colors.find(color => color.id === colorToEdit.id);
+
+    
+
+    axiosWithAuth()
+    .put(`/api/colors/${colorToEdit.id}`,colorToEdit)
+    .then(res => {colors[updateColors] = res.data; setEditing(false)})
+    .catch(err => console.log(err))
     // Make a put request to save your updated color
     // think about where will you get the id from...
     // where is is saved right now?
@@ -25,14 +39,19 @@ const ColorList = ({ colors, updateColors }) => {
 
   const deleteColor = color => {
     // make a delete request to delete this color
+    axiosWithAuth()
+    .delete(`/api/colors/${color.id}`)
+    .catch(err => console.log(err))
+    
+    
   };
 
   return (
-    <div className="colors-wrap">
+    <div className="colors-wrap"  >
       <p>colors</p>
-      <ul>
+      <ul data-testid="colorsTest">
         {colors.map(color => (
-          <li key={color.color} onClick={() => editColor(color)}>
+          <li    key={color.color} onClick={() => editColor(color)}>
             <span>
               <span className="delete" onClick={e => {
                     e.stopPropagation();
@@ -77,6 +96,7 @@ const ColorList = ({ colors, updateColors }) => {
           <div className="button-row">
             <button type="submit">save</button>
             <button onClick={() => setEditing(false)}>cancel</button>
+            <button onClick={() => history.push('/addColor')}>Add Color</button>
           </div>
         </form>
       )}
